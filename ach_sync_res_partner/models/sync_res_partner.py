@@ -55,7 +55,7 @@ class SyncResPartner(models.Model):
                 raise UserError('An error has occurred with the connection data, verify your data access or server data')
         else:
             raise UserError('An error has occurred with the connection data, verify your data access')
-    
+
     def import_data(self):
         return
 

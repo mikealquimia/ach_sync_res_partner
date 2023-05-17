@@ -34,17 +34,35 @@ class SyncResPartner(models.Model):
             try:
                 partner_fields = models.execute_kw(self.database_name, uid, self.password_username_database, 'ir.model.fields', 'search_read', [[['model_id','=','res.partner']]], {'fields': ['name','field_description','ttype']})
                 if partner_fields:
-                    for line in self.partner_fields_ids:
-                        line.unlink()
-                    for field in partner_fields:
-                        vals = {
-                            'name': field['name'],
-                            'name_import': field['name'],
-                            'field_description_import': field['field_description'],
-                            'ttype_import': field['ttype'],
-                            'odoo_sync_id': self.id,
-                        }
-                        self.env['sync.partner_fields'].create(vals)
+                    if self.type_sync == 'normal':
+                        field_normal = ['id','name','parent_id','active','category_id','city','barcode','comment','country_id','email','is_company',
+                                        'lang','mobile','phone','ref','state_id','street','street2','type','tz','user_id','website','vat'
+                                        ]
+                        for line in self.partner_fields_ids:
+                            line.unlink()
+                        for field in partner_fields:
+                            if field.name in field_normal:
+                                vals = {
+                                    'name': field['name'],
+                                    'name_import': field['name'],
+                                    'field_description_import': field['field_description'],
+                                    'ttype_import': field['ttype'],
+                                    'odoo_sync_id': self.id,
+                                }
+                                self.env['sync.partner_fields'].create(vals)
+                    if self.type_sync == 'advance':
+                        for line in self.partner_fields_ids:
+                            line.unlink()
+                        for field in partner_fields:
+                            if field.name in field_normal:
+                                vals = {
+                                    'name': field['name'],
+                                    'name_import': field['name'],
+                                    'field_description_import': field['field_description'],
+                                    'ttype_import': field['ttype'],
+                                    'odoo_sync_id': self.id,
+                                }
+                                self.env['sync.partner_fields'].create(vals)
                     model_partner = self.env['ir.model'].search([('model','=','res.partner')],limit=1)
                     field_exist = self.env['ir.model.fields'].search([('model_id','=',model_partner.id)])
                     for line in self.partner_fields_ids:
@@ -57,6 +75,10 @@ class SyncResPartner(models.Model):
             raise UserError('An error has occurred with the connection data, verify your data access')
 
     def import_data(self):
+        if self.type_sync == 'normal':
+            self.import_normal()
+        elif self.type_sync == 'advance':
+            self.import_advance()
         return
 
 class SyncPartnerFields(models.Model):

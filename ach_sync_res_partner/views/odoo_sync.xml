@@ -45,7 +45,7 @@
                 <field name="type_sync"/>
               </group>
             </div>
-            <notebook attrs="{'invisible': [('state', '=', 'draft'),('type_sync','=','normal')]}">
+            <notebook attrs="{'invisible': [('state', '=', 'draft')]}">
               <page name="fields" string="Fields">
                 <field name="partner_fields_ids">
                   <tree create="0" editable="bottom">

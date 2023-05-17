@@ -1,0 +1,84 @@
+<odoo>
+  <data>
+
+    <record id="sync_res_partner_tree" model="ir.ui.view">
+      <field name="name">Sync Res Partner</field>
+      <field name="model">sync.res_partner</field>
+      <field name="priority">2</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="type_sync"/>
+          <field name="url_database"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="sync_res_partner_form" model="ir.ui.view">
+      <field name="name">Sync Res Partner View</field>
+      <field name="model">sync.res_partner</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <button name="logging_db" string="Logging" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+            <button name="import_data" string="Import data" type="object" attrs="{'invisible': [('state', '!=', 'logging')]}"/>
+            <field name="state"  widget="statusbar"/>
+          </header>
+          <sheet>
+            <div class="oe_title">
+              <h1>
+                <field name="name"/>
+              </h1>
+            </div>
+            <div>
+              <group>
+                <group>
+                  <field name="url_database" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                  <field name="database_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </group>
+                <group>
+                  <field name="username_database" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                  <field name="password_username_database" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </group>
+              </group>
+              <group>
+                <field name="type_sync"/>
+              </group>
+            </div>
+            <notebook attrs="{'invisible': [('state', '=', 'draft'),('type_sync','=','normal')]}">
+              <page name="fields" string="Fields">
+                <field name="partner_fields_ids">
+                  <tree create="0" editable="bottom">
+                    <field name="odoo_sync_id" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <field name="name_import" readonly="1"/>
+                    <field name="field_description_import" readonly="1"/>
+                    <field name="ttype_import" readonly="1"/>
+                    <field name="name_dest"/>
+                    <field name="ttype_dest" readonly="1"/>
+                    <field name="import_field"/>
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="act_sync_res_partner" model="ir.actions.act_window">
+      <field name="res_model">sync.res_partner</field>
+      <field name="name">Sync Res Partner</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="sync_res_partner_tree"></field>
+    </record>
+
+    <menuitem id="menu_sync_res_partner_parent"
+      parent="base.menu_automation"
+      groups="base.group_system"
+      sequence="900"
+      action="act_sync_res_partner"
+      name="Sync Res Partner"/>
+
+  </data>
+</odoo>

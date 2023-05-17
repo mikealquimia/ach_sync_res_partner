@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sync_res_partner,sync.res_partner,model_sync_res_partner,base.group_system,1,1,1,1
+access_sync_partner_fields,sync.partner_fields,model_sync_partner_fields,base.group_system,1,1,1,1

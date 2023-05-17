@@ -81,6 +81,12 @@ class SyncResPartner(models.Model):
             self.import_advance()
         return
 
+    def import_normal(self):
+        return
+
+    def import_advance(self):
+        return
+
 class SyncPartnerFields(models.Model):
     _name = 'sync.partner_fields'
     _description = 'Odoo Sync Ir Models Fields'
